@@ -6,7 +6,7 @@ import { checkAuthenticated, useAuthState, useAuthDispatch } from '../context/au
 import logger from '../utils/logger';
 
 const AppRoutes = ({ component: Component, path, isPrivate, ...rest }) => {
-    const authState = useAuthState();
+    const { loading, accessToken, isAuthenticated } = useAuthState();
     const dispatch = useAuthDispatch();
 
     const history = useHistory();
@@ -36,11 +36,25 @@ const AppRoutes = ({ component: Component, path, isPrivate, ...rest }) => {
         <Route
             path={path}
             render={(props) => {
-                return isFetching && (isPrivate && !Boolean(authState.accessToken) ? (
-                    <Redirect to={{ pathname: "/login" }} />
-                ) : (
+                // if (isFetching) logger('Kullanıcı bilgisi alındı...', 'd');
+
+                if (isFetching && isPrivate && !isAuthenticated) {
+                    return <Redirect to={{ pathname: "/login" }} />
+                }
+
+                // fetch işlemi tamamlandı ve loading false ise compenenti render ediyoruz
+                return (isFetching && !loading ? (
                     <Component {...props} />
-                ))
+                ) : (
+                    <div className="pageLoader">
+                        <div className="circles">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <span></span>
+                        </div>
+                    </div>
+                ));
             }}
             {...rest}
         />
