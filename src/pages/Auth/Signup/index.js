@@ -4,7 +4,6 @@ import { signup, useAuthState, useAuthDispatch } from '../../../context/auth';
 
 const Signup = () => {
     const [formData, setFormData] = useState({
-        username: '',
         email: '',
         phone: '',
         first_name: '',
@@ -17,7 +16,7 @@ const Signup = () => {
     const { errorMessage, isAuthenticated } = useAuthState()
 
 
-    const { username, email, phone, first_name, last_name, password, re_password } = formData;
+    const { email, phone, first_name, last_name, password, re_password } = formData;
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -25,7 +24,7 @@ const Signup = () => {
         e.preventDefault();
 
         if (password === re_password) {
-            signup(dispatch, username, email, phone, first_name, last_name, password, re_password);
+            signup(dispatch, email, phone, first_name, last_name, password, re_password);
         }
     };
 
@@ -37,17 +36,6 @@ const Signup = () => {
             <h1>Sign Up</h1>
             <p>Create your Account</p>
             <form onSubmit={e => onSubmit(e)}>
-                <div className='form-group'>
-                    <input
-                        className='form-control'
-                        type='text'
-                        placeholder='Username*'
-                        name='username'
-                        value={username || ''}
-                        onChange={e => onChange(e)}
-                        required
-                    />
-                </div>
                 <div className='form-group'>
                     <input
                         className='form-control'

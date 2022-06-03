@@ -1,4 +1,5 @@
 import Home from '../pages/Home/Home';
+import Invitation from '../pages/Invitation/Invitation';
 import NotFound from '../pages/Home/404';
 import Login from '../pages/Auth/Login/index';
 import Signup from '../pages/Auth/Signup';
@@ -42,6 +43,11 @@ const routes = [
   {
     path: '/404',
     component: NotFound,
+    isPrivate: false,
+  },
+  {
+    path: '/davet',
+    component: Invitation,
     isPrivate: false,
   },
   {

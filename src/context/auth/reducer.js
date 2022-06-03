@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import {
+  START_LOADING,
   SIGNUP_SUCCESS,
   SIGNUP_FAIL,
   LOGIN_SUCCESS,
@@ -20,7 +21,7 @@ export const initialState = {
   refreshToken: localStorage.getItem('refreshToken'),
   isAuthenticated: false,
   user: null,
-  loading: true,
+  loading: false,
   errorMessage: null,
   msg: null,
 };
@@ -28,7 +29,7 @@ export const initialState = {
 export const AuthReducer = (state = initialState, action) => {
 
   switch (action.type) {
-    case "START_LOADING":
+    case START_LOADING:
       return {
         ...initialState,
         loading: true

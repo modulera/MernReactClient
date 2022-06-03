@@ -1,6 +1,8 @@
 import axios from 'axios';
+import logger from "../../utils/logger";
 
 import {
+    START_LOADING,
     SIGNUP_SUCCESS,
     SIGNUP_FAIL,
     LOGIN_SUCCESS,
@@ -29,14 +31,26 @@ const parseError = (err) => {
     return errorText;
 };
 
+export const testCallback = async (dispatch, email, password, name) => {
+    dispatch({ type: START_LOADING });
+    logger('--------1--------', 'w')
+
+    setTimeout(() => {
+        dispatch({ type: AUTHENTICATED_FAIL });
+        // dispatch({ type: SIGNUP_FAIL, errorMessage: 'Hata :(' });
+        logger('--------2--------', 'w')
+    }, 1000);
+};
+
 export const checkAuthenticated = async (dispatch, isPrivate, path, history) => {
     if (typeof window == 'undefined') {
-        dispatch({
-            type: AUTHENTICATED_FAIL
-        });
+        dispatch({ type: AUTHENTICATED_FAIL });
     }
 
     if (localStorage.getItem('accessToken')) {
+        dispatch({ type: START_LOADING });
+        // logger('Kullanıcı kontrol ediliyor...', 'd');
+
         const config = {
             headers: {
                 'Accept': 'application/json',
@@ -58,10 +72,9 @@ export const checkAuthenticated = async (dispatch, isPrivate, path, history) => 
             });
 
         } catch (err) {
-            dispatch({
-                type: AUTHENTICATED_FAIL,
-                errorMessage: parseError(err)
-            });
+            // logger(AUTHENTICATED_FAIL, 'e')
+
+            dispatch({ type: AUTHENTICATED_FAIL, errorMessage: parseError(err) });
 
             // isPrivate && 
             if (path !== '/login') {
@@ -70,6 +83,7 @@ export const checkAuthenticated = async (dispatch, isPrivate, path, history) => 
 
         }
     } else {
+        // logger('AccessToken notfound', 'e')
         dispatch({
             type: AUTHENTICATED_FAIL,
             // errorMessage: 'AccessToken is required!'
@@ -108,6 +122,8 @@ export const load_user = async (dispatch) => {
 }
 
 export const loginUser = async (dispatch, email, password) => {
+    dispatch({ type: START_LOADING });
+
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -136,37 +152,24 @@ export const loginUser = async (dispatch, email, password) => {
     }
 };
 
-export const signup = async (dispatch, username, email, phone, first_name, last_name, password, re_password) => {
-    dispatch({
-        type: 'START_LOADING'
-    });
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }
+export const signup = async (dispatch, email, phone, first_name, last_name, password, re_password) => {
+    dispatch({ type: START_LOADING });
+    const config = { headers: { 'Content-Type': 'application/json' } }
 
-    const body = JSON.stringify({ username, email, phone, first_name, last_name, password, re_password });
+    const body = JSON.stringify({ email, phone, first_name, last_name, password, re_password });
 
     try {
         const res = await axios.post(`${baseURL}/auth/register`, body, config);
 
-        dispatch({
-            type: SIGNUP_SUCCESS,
-            payload: res.data
-        });
+        dispatch({ type: SIGNUP_SUCCESS, payload: res.data });
     } catch (err) {
-        dispatch({
-            type: SIGNUP_FAIL,
-            errorMessage: parseError(err)
-        });
+        dispatch({ type: SIGNUP_FAIL, errorMessage: parseError(err) });
     }
 };
 
 export const verify = (uid, token) => async dispatch => {
-    dispatch({
-        type: 'START_LOADING'
-    });
+    dispatch({ type: START_LOADING });
+
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -191,9 +194,8 @@ export const verify = (uid, token) => async dispatch => {
 };
 
 export const resetPassword = async (dispatch, email) => {
-    dispatch({
-        type: 'START_LOADING'
-    });
+    dispatch({ type: START_LOADING });
+
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -241,8 +243,6 @@ export const reset_password_confirm = (uid, token, new_password, re_new_password
 };
 
 export const logout = async (dispatch) => {
-    dispatch({
-        type: 'START_LOADING'
-    });
+    dispatch({ type: START_LOADING });
     dispatch({ type: LOGOUT });
 };
