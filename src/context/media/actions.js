@@ -1,0 +1,45 @@
+import axios from 'axios';
+import logger from "../../utils/logger";
+
+import {
+    START_LOADING,
+    MEDIAS_LOADED_FAIL,
+    MEDIAS_LOADED_SUCCESS,
+} from './types';
+
+const baseURL = "http://127.0.0.1:8080/api";
+
+const parseError = (err) => {
+    const errorText = (err.response ?
+        (err.response.data.error + ': ' + err.response.data.message) :
+        (err.toJSON().name + ': ' + err.toJSON().message)
+    );
+
+    return errorText;
+};
+
+export const loadFiles = async (dispatch) => {
+    dispatch({ type: START_LOADING });
+
+    const config = {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('accessToken')}`,
+        }
+    };
+
+    try {
+        const res = await axios.get(`${baseURL}/media/upload`, config);
+
+        dispatch({
+            type: MEDIAS_LOADED_SUCCESS,
+            payload: res.data
+        });
+
+    } catch (err) {
+        logger(err, 'e')
+
+        dispatch({ type: MEDIAS_LOADED_FAIL, message: parseError(err) });
+    }
+};
