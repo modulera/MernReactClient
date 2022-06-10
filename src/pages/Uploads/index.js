@@ -91,7 +91,7 @@ function Uploads(props) {
         // lightGallery.current.openGallery();
     }
 
-    if (mediaState.files?.description) {
+    if (fetchingImages && mediaState.files?.description) {
         updateGallery(mediaState.files?.description)
     }
 
