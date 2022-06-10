@@ -29,110 +29,95 @@ function Uploads(props) {
     // Register the plugins
     registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
+    const [files, setFiles] = useState([]);
+    const uploadUrl = `${config.apiUrl}/media/upload`;
+
+    const filePondInit = () => console.log("FilePond has initialized");
+
     const lightGallery = useRef(null);
+    const [fetchingImages, setFetchingImages] = useState(false);
 
-    const [items, setItems] = useState([
-        {
-            id: '1',
-            size: '1400-933',
-            src: 'https://images.unsplash.com/photo-1542103749-8ef59b94f47e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80',
-            thumb:
-                'https://images.unsplash.com/photo-1542103749-8ef59b94f47e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=240&q=80',
-            subHtml: `<div class="lightGallery-captions">
-                <h4>Photo by <a href="https://unsplash.com/@dann">Dan</a></h4>
-                <p>Published on November 13, 2018</p>
-            </div>`,
-        },
-    ]);
-
+    const [images, setImages] = useState([]);
+    // console.log(images);
 
     const lightGalleryInit = useCallback((detail) => {
         if (detail) {
             lightGallery.current = detail.instance;
+            console.log('LightGallery has been initialized')
         }
-        console.log('LightGallery has been initialized')
     }, []);
 
-    // const openGallery = useCallback(() => {
-    //     lightGallery.current.openGallery();
-    // }, []);
+    const openGallery = useCallback(() => {
+        lightGallery.current.openGallery();
+    }, []);
 
     // const addItems = useCallback(() => {
     //     const updatedItems = [
-    //       ...items,
+    //       ...images,
     //       ...newItems
     //     ];
-    //     setItems(updatedItems);
+    //     setImages(updatedItems);
     //     lightGallery.current.refresh(updatedItems);
     //     lightGallery.current.openGallery();
-    //   }, [items]);
-
-    const [fetching, setFetching] = useState(false);
-
-    const [files, setFiles] = useState([]);
-    const uploadUrl = `${config.apiUrl}/media/upload`;
+    //   }, [images]);
 
     const { user, accessToken } = useAuthState();
+    // console.log(user);
 
     const dispatch = useMediaDispatch();
     const mediaState = useMediaState();
-    // console.log(mediaState);
-    
-    const updateGallery = () => {
-        console.log(fetching, mediaState);
-        if (fetching && mediaState.files.description) {
-            const newItems = []
-            mediaState.files.description.map((item, i) => {
-                newItems.push({
-                    id: item.id,
-                    // size: '1400-933',
-                    src: `${config.apiBaseUrl}/${item.fullPath}`,
-                    thumb: `${config.apiBaseUrl}/${item.fullPath}`,
-                    subHtml: `<div class="lightGallery-captions">
-                            <h4>Photo by <a href="https://unsplash.com/@dann">Dan</a></h4>
-                            <p>Published on November 13, 2018</p>
-                        </div>`,
-                })
-            })
+    // console.log(mediaState.files);
 
-            setItems(newItems);
-            lightGallery.current.refresh(newItems);
-            lightGallery.current.openGallery();
-        } else {
-            console.log('yeni resim yok');
-        }
+    const updateGallery = (mediaStateFiles) => {
+        console.log('mediaStateFiles', mediaStateFiles);
+
+        const newItems = []
+        mediaStateFiles.map((item, i) => {
+            // console.log(`${config.apiBaseUrl}/${item.fullPath}`);
+            newItems.push({
+                id: item.id,
+                // size: '1400-933',
+                src: `${config.apiBaseUrl}/${item.fullPath}`,
+                thumb: `${config.apiBaseUrl}/${item.fullPath}`,
+                subHtml: `<div class="lightGallery-captions">
+                        <h4>Photo by <a href="https://unsplash.com/@dann">Dan</a></h4>
+                        <p>Published on November 13, 2018</p>
+                    </div>`,
+            })
+        })
+
+        // setImages(newItems);
+        lightGallery.current.refresh(newItems);
+        // lightGallery.current.openGallery();
+    }
+
+    if (fetchingImages && mediaState.files?.description) {
+        updateGallery(mediaState.files?.description)
     }
 
     useEffect(() => {
-        logger('fetching files ...');
+        logger(['fetching images files ...', fetchingImages]);
 
         let isMounted = true; // note mutable flag
         ; (async () => {
             try {
                 await loadFiles(dispatch)
                 if (isMounted) { // add conditional check
-                    setFetching(true);
-                    logger('fetched files');
-                    // updateGallery()
-                    console.log('mediaState', mediaState);
+                    setFetchingImages(true);
+                    logger(['fetched images !!!', fetchingImages]);
                 } else logger("aborted files setState on unmounted component", 'e');
             } catch (err) {
-                setFetching(true);
-                console.error(err);
+                setFetchingImages(true);
+                logger(err, 'e');
             }
         })();
 
         return () => { isMounted = false; };
-    }, [items]);
-
-    const filePondInit = () => console.log("FilePond has initialized");
-
-    // const myGallery = (fetching && mediaState.files ? (
-    //     mediaState.files.description
-    // ) : [])
+    }, [files]);
 
     return (
         <div style={{ padding: 10 }}>
+            {console.log('sayafa render edildi')}
             <div>
                 <div className="uploadsPage">
                     <FilePond
@@ -153,15 +138,19 @@ function Uploads(props) {
                         labelIdle='Resiml Yükle & <span class="filepond--label-action">Yada Çek</span>'
                     />
                 </div>
+
+
+                <button onClick={openGallery}>Open Gallery</button>
+                {/* <button onClick={addItems}>Add new slide and open gallery</button> */}
             </div>
 
             <div className="myGallery">
                 <LightGallery
                     elementClassNames="custom-classname"
                     dynamic
-                    dynamicEl={items}
+                    dynamicEl={images}
                     onInit={lightGalleryInit}
-                    plugins={[lgZoom, lgVideo, lgThumbnail]}
+                    plugins={[lgZoom, lgVideo]} // , lgThumbnail
                 ></LightGallery>
             </div>
         </div>
