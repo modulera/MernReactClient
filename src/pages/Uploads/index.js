@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-import logger from '../../utils/logger';
+// import logger from '../../utils/logger';
+import { Image, BackgroundImage } from "react-image-and-background-image-fade";
 
 // LightGallery
 import LightGallery from 'lightgallery/react';
@@ -9,7 +10,7 @@ import LightGallery from 'lightgallery/react';
 import 'lightgallery/scss/lightgallery.scss';
 import 'lightgallery/scss/lg-zoom.scss';
 // import plugins if you need
-import lgThumbnail from 'lightgallery/plugins/thumbnail';
+// import lgThumbnail from 'lightgallery/plugins/thumbnail';
 import lgZoom from 'lightgallery/plugins/zoom';
 import lgVideo from 'lightgallery/plugins/video';
 
@@ -26,18 +27,20 @@ import { useAuthState } from '../../context/auth';
 import { loadFiles, useMediaState, useMediaDispatch } from '../../context/media'
 
 function Uploads(props) {
-    const { user, accessToken } = useAuthState();
-    // console.log(user);
+    // console.log(props);
+
+    const { accessToken } = useAuthState();
 
     // Register the plugins
     registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
     const [files, setFiles] = useState([]);
-    const uploadUrl = `${CONFIG.apiUrl}/media/files`;
     const filePondInit = () => console.log("FilePond has initialized");
     // filePond End
 
     const [fetching, setFetching] = useState(false);
+
+    const [userImages, setUserImages] = useState([]);
     const [galleryItems, setGalleryItems] = useState([]);
 
     const mediaState = useMediaState();
@@ -69,35 +72,41 @@ function Uploads(props) {
         // lightGallery.current.openGallery();
     }, [galleryItems]);
 
-    useEffect(async () => {
-        console.log('fetching', fetching);
-        if (!fetching) return;
+    useEffect(() => {
+        const fetchdata = async () => {
+            console.log('fetching', fetching);
+            if (!fetching) return;
 
-        const data = await loadFiles(mediaDispatch);
-        setFetching(false);
+            const data = await loadFiles(mediaDispatch);
+            setFetching(false);
 
-        if (data?.status !== 'success' && data?.description.length < 1) {
-            console.log('files not found', data);
-            return;
+            if (data?.status !== 'success' && data?.description.length < 1) {
+                console.log('files not found', data);
+                return;
+            }
+
+            setUserImages(data.description);
+
+            const newItems = [];
+            for await (const [index, item] of data.description.entries()) {
+                newItems.push({
+                    id: item.id,
+                    // size: '1400-933',
+                    src: `${CONFIG.apiBaseUrl}/${item.fullPath}`,
+                    thumb: `${CONFIG.apiBaseUrl}/${item.fullPath}`,
+                    subHtml: `<div class="lightGallery-captions" id="image-${index}"><h4>${item.name}</h4><p>Published on ${item.updatedAt}</p></div>`,
+                });
+            }
+
+            addItems(newItems);
         }
 
-        const newItems = [];
-        for await (const [index, item] of data.description.entries()) {
-            newItems.push({
-                id: item.id,
-                // size: '1400-933',
-                src: `${CONFIG.apiBaseUrl}/${item.fullPath}`,
-                thumb: `${CONFIG.apiBaseUrl}/${item.fullPath}`,
-                subHtml: `<div class="lightGallery-captions"><h4>${item.name}</h4><p>Published on ${item.updatedAt}</p></div>`,
-            });
-        }
-
-        addItems(newItems);
-    }, [fetching]);
+        fetchdata();
+    }, [fetching, addItems, mediaDispatch]);
 
     return (
         <div style={{ padding: 10 }}>
-            {console.log('sayafa render edildi')}
+            {/* {console.log('sayafa render edildi')} */}
             <div>
                 <div className="uploadsPage">
                     <FilePond
@@ -107,7 +116,7 @@ function Uploads(props) {
                         allowMultiple={true}
                         maxFiles={3}
                         server={{
-                            url: uploadUrl,
+                            url: `${CONFIG.apiUrl}/media/files`,
                             process: {
                                 headers: {
                                     'Authorization': accessToken,
@@ -119,9 +128,8 @@ function Uploads(props) {
                     />
                 </div>
 
-                <div className='myGallery'>
+                <div className='lightGallery'>
                     {mediaState?.loading ? 'Yükleniyor...' : (<button onClick={openGallery}>Open Gallery</button>)}
-
                     <LightGallery
                         elementClassNames="custom-classname"
                         dynamic
@@ -129,6 +137,23 @@ function Uploads(props) {
                         onInit={onInitGallery}
                         plugins={[lgZoom, lgVideo]}>
                     </LightGallery>
+                </div>
+
+                <div className='myGallery'>
+                    {userImages.length > 0 && (
+                        <ul>
+                            {userImages.map((item, i) => (
+                                <li key={i}>
+                                    <Image
+                                        src={CONFIG.apiBaseUrl + '/' + item.fullPath}
+                                        width="800px"
+                                        height="400px"
+                                        lazyLoad
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
             </div>
         </div>
