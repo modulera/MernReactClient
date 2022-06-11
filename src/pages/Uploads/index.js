@@ -21,99 +21,79 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
-import config from '../../config';
+import CONFIG from '../../config';
 import { useAuthState } from '../../context/auth';
 import { loadFiles, useMediaState, useMediaDispatch } from '../../context/media'
 
 function Uploads(props) {
+    const { user, accessToken } = useAuthState();
+    // console.log(user);
+
     // Register the plugins
     registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
     const [files, setFiles] = useState([]);
-    const uploadUrl = `${config.apiUrl}/media/upload`;
-
+    const uploadUrl = `${CONFIG.apiUrl}/media/files`;
     const filePondInit = () => console.log("FilePond has initialized");
+    // filePond End
+
+    const [fetching, setFetching] = useState(false);
+    const [galleryItems, setGalleryItems] = useState([]);
+
+    const mediaState = useMediaState();
+    const mediaDispatch = useMediaDispatch();
 
     const lightGallery = useRef(null);
-    const [fetchingImages, setFetchingImages] = useState(false);
-
-    const [images, setImages] = useState([]);
-    // console.log(images);
-
-    const lightGalleryInit = useCallback((detail) => {
-        if (detail) {
-            lightGallery.current = detail.instance;
-            console.log('LightGallery has been initialized')
-        }
-    }, []);
 
     const openGallery = useCallback(() => {
         lightGallery.current.openGallery();
     }, []);
 
-    // const addItems = useCallback(() => {
-    //     const updatedItems = [
-    //       ...images,
-    //       ...newItems
-    //     ];
-    //     setImages(updatedItems);
-    //     lightGallery.current.refresh(updatedItems);
-    //     lightGallery.current.openGallery();
-    //   }, [images]);
+    const onInitGallery = useCallback((detail) => {
+        if (detail) {
+            lightGallery.current = detail.instance;
+            console.log("LightGallery has initialized")
+            setFetching(true);
+        }
+    }, []);
 
-    const { user, accessToken } = useAuthState();
-    // console.log(user);
+    // Add new slides
+    const addItems = useCallback((newGalleryItems) => {
+        // console.log(newGalleryItems, 'newGalleryItems');
+        const updatedItems = [
+            ...galleryItems,
+            ...newGalleryItems,
+        ];
+        setGalleryItems(updatedItems);
+        lightGallery.current.refresh(updatedItems);
+        // lightGallery.current.openGallery();
+    }, [galleryItems]);
 
-    const dispatch = useMediaDispatch();
-    const mediaState = useMediaState();
-    // console.log(mediaState.files);
+    useEffect(async () => {
+        console.log('fetching', fetching);
+        if (!fetching) return;
 
-    const updateGallery = (mediaStateFiles) => {
-        console.log('mediaStateFiles', mediaStateFiles);
+        const data = await loadFiles(mediaDispatch);
+        setFetching(false);
 
-        const newItems = []
-        mediaStateFiles.map((item, i) => {
-            // console.log(`${config.apiBaseUrl}/${item.fullPath}`);
+        if (data?.status !== 'success' && data?.description.length < 1) {
+            console.log('files not found', data);
+            return;
+        }
+
+        const newItems = [];
+        for await (const [index, item] of data.description.entries()) {
             newItems.push({
                 id: item.id,
                 // size: '1400-933',
-                src: `${config.apiBaseUrl}/${item.fullPath}`,
-                thumb: `${config.apiBaseUrl}/${item.fullPath}`,
-                subHtml: `<div class="lightGallery-captions">
-                        <h4>Photo by <a href="https://unsplash.com/@dann">Dan</a></h4>
-                        <p>Published on November 13, 2018</p>
-                    </div>`,
-            })
-        })
+                src: `${CONFIG.apiBaseUrl}/${item.fullPath}`,
+                thumb: `${CONFIG.apiBaseUrl}/${item.fullPath}`,
+                subHtml: `<div class="lightGallery-captions"><h4>${item.name}</h4><p>Published on ${item.updatedAt}</p></div>`,
+            });
+        }
 
-        // setImages(newItems);
-        lightGallery.current.refresh(newItems);
-        // lightGallery.current.openGallery();
-    }
-
-    if (fetchingImages && mediaState.files?.description) {
-        updateGallery(mediaState.files?.description)
-    }
-
-    useEffect(() => {
-        logger(['fetching images files ...', fetchingImages]);
-
-        let isMounted = true; // note mutable flag
-        ; (async () => {
-            try {
-                await loadFiles(dispatch)
-                if (isMounted) { // add conditional check
-                    setFetchingImages(true);
-                    logger(['fetched images !!!', fetchingImages]);
-                } else logger("aborted files setState on unmounted component", 'e');
-            } catch (err) {
-                setFetchingImages(true);
-                logger(err, 'e');
-            }
-        })();
-
-        return () => { isMounted = false; };
-    }, [files]);
+        addItems(newItems);
+    }, [fetching]);
 
     return (
         <div style={{ padding: 10 }}>
@@ -139,19 +119,17 @@ function Uploads(props) {
                     />
                 </div>
 
+                <div className='myGallery'>
+                    {mediaState?.loading ? 'Yükleniyor...' : (<button onClick={openGallery}>Open Gallery</button>)}
 
-                <button onClick={openGallery}>Open Gallery</button>
-                {/* <button onClick={addItems}>Add new slide and open gallery</button> */}
-            </div>
-
-            <div className="myGallery">
-                <LightGallery
-                    elementClassNames="custom-classname"
-                    dynamic
-                    dynamicEl={images}
-                    onInit={lightGalleryInit}
-                    plugins={[lgZoom, lgVideo]} // , lgThumbnail
-                ></LightGallery>
+                    <LightGallery
+                        elementClassNames="custom-classname"
+                        dynamic
+                        dynamicEl={galleryItems}
+                        onInit={onInitGallery}
+                        plugins={[lgZoom, lgVideo]}>
+                    </LightGallery>
+                </div>
             </div>
         </div>
     )
