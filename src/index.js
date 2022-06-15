@@ -1,16 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.scss';
-
 import reportWebVitals from './reportWebVitals';
 
-import { AuthProvider } from './context/auth';
-import { LayoutProvider } from "./context/LayoutContext";
+import App from './App';
+import './index.scss';
 
+import { AuthProvider } from './context/auth';
 import { MediaProvider } from './context/media';
+import { LayoutProvider } from "./context/LayoutContext";
 
 ReactDOM.render(
   <React.StrictMode>

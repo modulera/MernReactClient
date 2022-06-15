@@ -5,8 +5,8 @@ import {
 } from 'react-router-dom';
 
 import routes from './config/routes';
-import Layout from "./components/Layout";
 import AppRoute from './components/AppRoutes';
+import Layout from "./components/Layout";
 
 function App() {
   return (
