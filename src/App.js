@@ -6,7 +6,7 @@ import {
 
 import routes from './config/routes';
 import AppRoute from './components/AppRoutes';
-import Layout from "./components/Layout";
+import Layout from "./components/Layout/Layout";
 
 function App() {
   return (
