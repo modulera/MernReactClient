@@ -8,7 +8,7 @@ function Dashboard(props) {
 
     // const handleLogout = () => {
     //     logout(dispatch) //call the logout action
-    //     props.history.push('/login') //navigate to logout page on logout
+    //     props.history.push('/signin') //navigate to logout page on logout
     // }
 
     return (

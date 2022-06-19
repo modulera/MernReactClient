@@ -12,7 +12,7 @@ function Home() {
           NodeJS and JWT authentication to create a fully functional web application.
         </p>
         <p className="lead">
-          <Link className="btn btn-primary btn-lg" to="/login" role="button">
+          <Link className="btn btn-primary btn-lg" to="/signin" role="button">
             Get Started
           </Link>
         </p>

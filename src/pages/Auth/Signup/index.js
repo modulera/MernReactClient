@@ -1,124 +1,194 @@
 import React, { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { signup, useAuthState, useAuthDispatch } from '../../../context/auth';
+import { Redirect, Link as RaouteLink } from 'react-router-dom';
+import { signupUser, useAuthState, useAuthDispatch } from '../../../context/auth';
+
+import {
+    Container,
+    Box,
+    Typography,
+    Button,
+    Avatar,
+    TextField,
+    FormControlLabel,
+    Checkbox,
+    Link,
+    Grid,
+    Fade,
+} from '@mui/material';
+
+import {
+    Send as SendIcon,
+    LockOutlined as LockOutlinedIcon,
+} from '@mui/icons-material';
+
+import {
+    LoadingButton
+} from '@mui/lab';
 
 const Signup = () => {
+    const userDispatch = useAuthDispatch();
+    const { loading, errorMessage, isAuthenticated } = useAuthState();
+
     const [formData, setFormData] = useState({
         email: '',
         phone: '',
         first_name: '',
-        lastname: '',
+        last_name: '',
         password: '',
         re_password: '',
     });
 
-    const dispatch = useAuthDispatch()
-    const { errorMessage, isAuthenticated } = useAuthState()
-
-
     const { email, phone, first_name, last_name, password, re_password } = formData;
 
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleOnChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    const onSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (password === re_password) {
-            signup(dispatch, email, phone, first_name, last_name, password, re_password);
-        }
+        signupUser(userDispatch, email, phone, first_name, last_name, password, re_password);
     };
 
-    if (isAuthenticated)
-        return <Redirect to='/login' />;
+    if (isAuthenticated) {
+        return <Redirect to='/dashboard' />;
+    }
 
     return (
-        <div className='container mt-5'>
-            <h1>Sign Up</h1>
-            <p>Create your Account</p>
-            <form onSubmit={e => onSubmit(e)}>
-                <div className='form-group'>
-                    <input
-                        className='form-control'
-                        type='email'
-                        placeholder='Email*'
-                        name='email'
-                        value={email || ''}
-                        onChange={e => onChange(e)}
-                        required
-                    />
-                </div>
-                <div className='form-group'>
-                    <input
-                        className='form-control'
-                        type='phone'
-                        placeholder='phone*'
-                        name='phone'
-                        value={phone || ''}
-                        onChange={e => onChange(e)}
-                        minLength='10'
-                        required
-                    />
-                </div>
-                <div className='form-group'>
-                    <input
-                        className='form-control'
-                        type='first_name'
-                        placeholder='first_name*'
-                        name='first_name'
-                        value={first_name || ''}
-                        onChange={e => onChange(e)}
-                        required
-                    />
-                </div>
-                <div className='form-group'>
-                    <input
-                        className='form-control'
-                        type='last_name'
-                        placeholder='last_name*'
-                        name='last_name'
-                        value={last_name || ''}
-                        onChange={e => onChange(e)}
-                        required
-                    />
-                </div>
-                <div className='form-group'>
-                    <input
-                        className='form-control'
-                        type='password'
-                        placeholder='Password*'
-                        name='password'
-                        value={password || ''}
-                        onChange={e => onChange(e)}
-                        minLength='8'
-                        required
-                    />
-                </div>
-                <div className='form-group'>
-                    <input
-                        className='form-control'
-                        type='password'
-                        placeholder='Confirm Password*'
-                        name='re_password'
-                        value={re_password || ''}
-                        onChange={e => onChange(e)}
-                        minLength='8'
-                        required
-                    />
-                </div>
-                {errorMessage ?
-                    <p className='mt-3'>
-                        {errorMessage}
-                    </p>
-                    :
-                    <p></p>
-                }
+        <>
+            <Container maxWidth="xs">
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
 
-                <button className='btn btn-primary' type='submit'>Register</button>
-            </form>
-            <p className='mt-3'>
-                Already have an account? <Link to='/login'>Sign In</Link>
-            </p>
-        </div>
+                    <Fade in={Boolean(errorMessage)}>
+                        <Typography color="error">
+                            {errorMessage}
+                        </Typography>
+                    </Fade>
+
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+
+                    <Typography component="h1" variant="h5">
+                        Kaydol
+                    </Typography>
+                    <Box component="form" noValidate onSubmit={e => handleSubmit(e)} sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    autoComplete="given-name"
+                                    name="first_name"
+                                    required
+                                    fullWidth
+                                    id="first_name"
+                                    label="Adınız"
+                                    autoFocus
+                                    value={first_name || ''}
+                                    onChange={e => handleOnChange(e)}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="last_name"
+                                    label="Soyadınız"
+                                    name="last_name"
+                                    autoComplete="family-name"
+                                    value={last_name || ''}
+                                    onChange={e => handleOnChange(e)}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="E-posta Adresiniz"
+                                    name="email"
+                                    autoComplete="email"
+                                    value={email || ''}
+                                    onChange={e => handleOnChange(e)}
+                                />
+                            </Grid>
+                            {/* <Grid item xs={12}>
+                                <TextField
+                                    autoComplete="given-phone"
+                                    name="phone"
+                                    required
+                                    fullWidth
+                                    id="phone"
+                                    label="Telefon"
+                                    autoFocus
+                                    value={phone || ''}
+                                    onChange={e => handleOnChange(e)}
+                                />
+                            </Grid> */}
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    type="password"
+                                    id="password"
+                                    label="Parola"
+                                    autoComplete="password"
+                                    value={password || ''}
+                                    onChange={e => handleOnChange(e)}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    type="password"
+                                    name="re_password"
+                                    id="re_password"
+                                    label="Parola (tekrar)"
+                                    autoComplete=""
+                                    value={re_password || ''}
+                                    onChange={e => handleOnChange(e)}
+                                />
+                            </Grid>
+                        </Grid>
+
+                        <Grid container sx={{ mt: 2, mb: 3 }}>
+                            <Grid item xs>
+                                <FormControlLabel
+                                    control={<Checkbox value="remember" color="primary" />}
+                                    label="Kullanım koşullarını kabul ediyorum."
+                                />
+                            </Grid>
+                            <Grid item>
+                                <LoadingButton
+                                    size="small"
+                                    loadingPosition="end"
+                                    variant="contained"
+                                    loading={loading}
+                                    endIcon={<SendIcon />}
+                                    onClick={e => handleSubmit(e)}
+                                    disabled={!email || !password}>
+                                    Kaydol
+                                </LoadingButton>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container justifyContent="flex-end">
+                            <Grid item>
+                                <RaouteLink to="/signin" variant="body2">
+                                    Zaten bir hesabınız mı var? Oturum Aç
+                                </RaouteLink>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Box>
+            </Container>
+        </>
     );
 
 };

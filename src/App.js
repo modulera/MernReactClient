@@ -10,20 +10,22 @@ import Layout from "./components/Layout/Layout";
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Switch>
-          {routes.map((route) => (
-            <AppRoute
-              key={route.path}
-              path={route.path}
-              component={route.component}
-              isPrivate={route.isPrivate}
-            />
-          ))}
-        </Switch>
-      </Layout>
-    </Router>
+    <>
+      <Router>
+        <Layout>
+          <Switch>
+            {routes.map((route) => (
+              <AppRoute
+                key={route.path}
+                path={route.path}
+                component={route.component}
+                isPrivate={route.isPrivate}
+              />
+            ))}
+          </Switch>
+        </Layout>
+      </Router>
+    </>
   );
 }
 

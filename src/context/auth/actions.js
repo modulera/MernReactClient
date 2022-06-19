@@ -77,8 +77,8 @@ export const checkAuthenticated = async (dispatch, isPrivate, path, history) => 
             dispatch({ type: AUTHENTICATED_FAIL, errorMessage: parseError(err) });
 
             // isPrivate && 
-            if (path !== '/login') {
-                history.push('/login');
+            if (path !== '/signin') {
+                history.push('/signin');
             }
 
         }
@@ -90,36 +90,6 @@ export const checkAuthenticated = async (dispatch, isPrivate, path, history) => 
         });
     }
 };
-
-export const load_user = async (dispatch) => {
-    if (localStorage.getItem('accessToken')) {
-        const config = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `${localStorage.getItem('accessToken')}`
-            }
-        };
-
-        try {
-            const res = await axios.get(`${CONFIG.apiUrl}/auth/me`, config);
-            dispatch({
-                type: USER_LOADED_SUCCESS,
-                payload: res.data
-            });
-        } catch (err) {
-            dispatch({
-                type: USER_LOADED_FAIL,
-                errorMessage: parseError(err)
-            });
-        }
-    } else {
-        dispatch({
-            type: USER_LOADED_FAIL,
-            // errorMessage: err
-        });
-    }
-}
 
 export const loginUser = async (dispatch, email, password) => {
     dispatch({ type: START_LOADING });
@@ -152,7 +122,7 @@ export const loginUser = async (dispatch, email, password) => {
     }
 };
 
-export const signup = async (dispatch, email, phone, first_name, last_name, password, re_password) => {
+export const signupUser = async (dispatch, email, phone, first_name, last_name, password, re_password) => {
     dispatch({ type: START_LOADING });
     const config = { headers: { 'Content-Type': 'application/json' } }
 

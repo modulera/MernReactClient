@@ -1,7 +1,7 @@
 import Home from '../pages/Home/Home';
 import Location from '../pages/Location/Location';
 import NotFound from '../pages/Home/404';
-import Login from '../pages/Auth/Login/index';
+import Signin from '../pages/Auth/Signin/index';
 import Signup from '../pages/Auth/Signup';
 import ResetPass from '../pages/Auth/ResetPass';
 
@@ -47,8 +47,8 @@ const routes = [
     title: 'Konum',
   },
   {
-    path: '/login',
-    component: Login,
+    path: '/signin',
+    component: Signin,
     isPrivate: false,
     isVisible: false,
     multiple: false,

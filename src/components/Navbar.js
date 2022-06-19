@@ -14,7 +14,7 @@ const Navbar = (props) => {
         e.preventDefault()
 
         logout(dispatch) //call the logout action
-        history.push('/login') //navigate to logout page on logout
+        history.push('/signin') //navigate to logout page on logout
     }
 
     const authLinks = (
@@ -49,7 +49,7 @@ const Navbar = (props) => {
             </ul>
             <ul className="nav navbar-nav">
                 <li className="nav-item">
-                    <NavLink className="nav-link" exact to='/login'>Login</NavLink>
+                    <NavLink className="nav-link" exact to='/signin'>Login</NavLink>
                 </li>
                 <li className="nav-item">
                     <NavLink className="nav-link" exact to='/signup'>Sign Up</NavLink>

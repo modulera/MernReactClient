@@ -36,12 +36,12 @@ import {
 import { mainListItems, secondaryListItems } from "./ListItems";
 const settings = ["Profile"];
 
-const headerMenuRight = ({ accessToken, ...props }) => {
+const headerMenuRight = ({ accessToken, isAuthenticated, ...props }) => {
     return (
         <>
-            {!accessToken ? (
+            {!accessToken && !isAuthenticated ? (
                 <>
-                    <NavLink exact to='/login'>Login</NavLink>
+                    <NavLink exact to='/signin'>GİRİŞ</NavLink>
                 </>
             ) : (
                 <>
@@ -141,13 +141,11 @@ const Header = (props) => {
     const history = useHistory();
     const authDispatch = useAuthDispatch();
 
-    console.log(history.location.pathname);
-
     const handleLogout = (e) => {
         e.preventDefault()
 
         logout(authDispatch) //call the logout action
-        history.push('/login') //navigate to logout page on logout
+        history.push('/signin') //navigate to logout page on logout
     }
 
     const [open, setOpen] = useState(false);
@@ -178,10 +176,8 @@ const Header = (props) => {
     return (
         <>
             <AppBar position="absolute" open={open}>
-                <Toolbar
-                    sx={{
-                        pr: "24px" // keep right padding when drawer closed
-                    }}>
+                <Toolbar sx={{ pr: "24px" }} className="testasd">
+                    {/* keep right padding when drawer closed */}
 
                     <IconButton
                         edge="start"
@@ -229,7 +225,7 @@ const Header = (props) => {
                     <Typography sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }} />
 
                     <Box sx={{ flexGrow: 0 }}>
-                        {headerMenuRight({ accessToken, handleOpenUserMenu, anchorElUser, handleCloseUserMenu, handleLogout, settings })}
+                        {headerMenuRight({ accessToken, isAuthenticated, handleOpenUserMenu, anchorElUser, handleCloseUserMenu, handleLogout, settings })}
                     </Box>
                 </Toolbar>
             </AppBar>
