@@ -179,18 +179,20 @@ const Header = (props) => {
                 <Toolbar sx={{ pr: "24px" }} className="testasd">
                     {/* keep right padding when drawer closed */}
 
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={toggleDrawer}
-                        sx={{
-                            marginRight: "36px",
-                            // ...(open && { display: "none" })  // ! depth1
-                        }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                    {accessToken && (
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={toggleDrawer}
+                            sx={{
+                                marginRight: "36px",
+                                // ...(open && { display: "none" })  // ! depth1
+                            }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    )}
 
                     <Typography
                         variant="h6"
@@ -230,7 +232,9 @@ const Header = (props) => {
                 </Toolbar>
             </AppBar>
 
-            <Drawer variant="permanent" open={open}>
+            <Drawer
+                open={open}
+                variant={accessToken ? 'permanent' : 'temporary'}>
                 <Toolbar
                     sx={{
                         display: "flex",

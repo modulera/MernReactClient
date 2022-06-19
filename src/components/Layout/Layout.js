@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from 'react-router-dom';
 
 import Header from './Header';
+import Footer from './Footer';
 
 import Theme from '../Theme';
 import { ThemeProvider } from "@mui/material/styles";
@@ -15,33 +16,13 @@ import {
   CssBaseline,
 } from '@mui/material';
 
-function Copyright(props) {
-  return (
-    <Box
-      component="footer"
-      {...props}>
-      <Container maxWidth="sm">
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          align="center"
-        >
-          {"Copyright © "}
-          <Link to='/'>AppName</Link>
-          {" " + new Date().getFullYear()}
-        </Typography>
-      </Container>
-    </Box>
-  );
-}
-
 const Layout = (props) => {
   return (
     <ThemeProvider theme={Theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
 
-        {Header()}
+        <Header />
 
         <Box
           component="main"
@@ -67,7 +48,7 @@ const Layout = (props) => {
             </Grid>
           </Container>
 
-          <Copyright sx={{
+          <Footer sx={{
             py: 3,
             px: 2,
             mt: 'auto',
