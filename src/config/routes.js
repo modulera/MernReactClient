@@ -1,5 +1,5 @@
 import Home from '../pages/Home/Home';
-import Invitation from '../pages/Invitation/Invitation';
+import Location from '../pages/Location/Location';
 import NotFound from '../pages/Home/404';
 import Login from '../pages/Auth/Login/index';
 import Signup from '../pages/Auth/Signup';
@@ -35,16 +35,16 @@ const routes = [
     isVisible: true,
     multiple: true,
     priority: 5,
-    title: 'Fotoğraflar',
+    title: 'Fotoğraflarım',
   },
   {
-    path: '/invitation',
-    component: Invitation,
+    path: '/location',
+    component: Location,
     isPrivate: false,
     isVisible: true,
     multiple: true,
     priority: 3,
-    title: 'Davet',
+    title: 'Konum',
   },
   {
     path: '/login',
@@ -89,7 +89,7 @@ const routes = [
     isVisible: true,
     multiple: true,
     priority: 1,
-    title: 'Anasayfa',
+    title: 'Düğünden Kareler',
   },
 ];
 
