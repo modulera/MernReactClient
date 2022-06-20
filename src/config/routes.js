@@ -6,6 +6,7 @@ import Signup from '../pages/Auth/Signup';
 import ResetPass from '../pages/Auth/ResetPass';
 
 import Posts from '../pages/Posts/index';
+import Test from '../pages/Test/index';
 import Uploads from '../pages/Uploads/index';
 import Dashboard from '../pages/Dashboard/index';
 
@@ -27,6 +28,15 @@ const routes = [
     multiple: false,
     priority: 4,
     title: 'Postlar',
+  },
+  {
+    path: '/test',
+    component: Test,
+    isPrivate: false,
+    isVisible: true,
+    multiple: false,
+    priority: 10,
+    title: 'Test',
   },
   {
     path: '/uploads',
