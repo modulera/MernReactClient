@@ -187,6 +187,7 @@ const Header = (props) => {
                             onClick={toggleDrawer}
                             sx={{
                                 marginRight: "36px",
+                                display: { xs: "block", md: "none" },
                                 // ...(open && { display: "none" })  // ! depth1
                             }}
                         >
@@ -232,7 +233,7 @@ const Header = (props) => {
                 </Toolbar>
             </AppBar>
 
-            <Drawer
+            <Drawer sx={{ display: { xs: "block", md: "none" } }}
                 open={open}
                 variant={accessToken ? 'permanent' : 'temporary'}>
                 <Toolbar
