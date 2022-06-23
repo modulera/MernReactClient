@@ -1,5 +1,20 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
+import './uploads.scss';
+
+import {
+    ImageList,
+    ImageListItem,
+    ImageListItemBar,
+    ListSubheader,
+    IconButton,
+} from '@mui/material';
+
+import {
+    Info as InfoIcon,
+    StarBorder as StarBorderIcon,
+} from '@mui/icons-material';
+
 // import logger from '../../utils/logger';
 import { Image, BackgroundImage } from "react-image-and-background-image-fade";
 
@@ -24,7 +39,15 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
 import CONFIG from '../../config';
 import { useAuthState } from '../../context/auth';
-import { loadFiles, useMediaState, useMediaDispatch } from '../../context/media'
+import { loadFiles, useMediaState, useMediaDispatch } from '../../context/media';
+
+function srcset(image, width, height, rows = 1, cols = 1) {
+    return {
+        src: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format`,
+        srcSet: `${image}?w=${width * cols}&h=${height * rows
+            }&fit=crop&auto=format&dpr=2 2x`,
+    };
+}
 
 function Uploads(props) {
     // console.log(props);
@@ -141,18 +164,80 @@ function Uploads(props) {
 
                 <div className='myGallery'>
                     {userImages.length > 0 && (
-                        <ul>
+                        <ImageList>
+                            <ImageListItem key="Subheader" cols={2}>
+                                <ListSubheader component="div">December</ListSubheader>
+                            </ImageListItem>
                             {userImages.map((item, i) => (
-                                <li key={i}>
-                                    <Image
-                                        src={CONFIG.apiBaseUrl + '/' + item.fullPath}
-                                        width="800px"
-                                        height="400px"
-                                        lazyLoad
+                                <ImageListItem key={item.id} sx={{ mb: 2 }}>
+                                    <img
+                                        src={`${CONFIG.apiBaseUrl}/${item.fullPath}?w=248&fit=crop&auto=format`}
+                                        srcSet={`${CONFIG.apiBaseUrl}/${item.fullPath}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                                        alt={item.name}
+                                        loading="lazy"
                                     />
-                                </li>
+
+                                    <ImageListItemBar
+                                        title={item.name}
+                                        subtitle={item.createdAt}
+                                        actionIcon={
+                                            <IconButton
+                                                sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                                                aria-label={`info about ${item.name}`}
+                                            >
+                                                <InfoIcon />
+                                            </IconButton>
+                                        }
+                                    />
+                                </ImageListItem>
                             ))}
-                        </ul>
+                        </ImageList>
+
+                        // <ImageList
+                        //     sx={{
+                        //         // width: 500,
+                        //         // height: 450,
+                        //         // Promote the list into its own layer in Chrome. This costs memory, but helps keeping high FPS.
+                        //         transform: 'translateZ(0)',
+                        //     }}
+                        //     rowHeight={200}
+                        //     gap={1}
+                        // >
+                        //     {userImages.map((item) => {
+                        //         const cols = item.featured ? 2 : 1;
+                        //         const rows = item.featured ? 2 : 1;
+
+                        //         item.src = `${CONFIG.apiBaseUrl}/${item.fullPath}`;
+
+                        //         return (
+                        //             <ImageListItem key={item.id} cols={cols} rows={rows}>
+                        //                 <img
+                        //                     {...srcset(item.src, 250, 200, rows, cols)}
+                        //                     alt={item.name}
+                        //                     loading="lazy"
+                        //                 />
+                        //                 <ImageListItemBar
+                        //                     sx={{
+                        //                         background:
+                        //                             'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+                        //                             'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                        //                     }}
+                        //                     title={item.name}
+                        //                     position="top"
+                        //                     actionIcon={
+                        //                         <IconButton
+                        //                             sx={{ color: 'white' }}
+                        //                             aria-label={`star ${item.name}`}
+                        //                         >
+                        //                             <StarBorderIcon />
+                        //                         </IconButton>
+                        //                     }
+                        //                     actionPosition="left"
+                        //                 />
+                        //             </ImageListItem>
+                        //         );
+                        //     })}
+                        // </ImageList>
                     )}
                 </div>
             </div>
