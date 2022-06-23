@@ -3,6 +3,8 @@ import { Redirect, Route, useHistory } from "react-router-dom";
 
 import { checkAuthenticated, useAuthState, useAuthDispatch } from '../../context/auth';
 
+import axios from "axios";
+
 function Test(props) {
     console.log('component render edildi');
 
@@ -16,36 +18,39 @@ function Test(props) {
 
 
     const history = useHistory();
-    const [isFetching, setIsFetching] = useState(false);
+    const [fetching, setFetching] = useState(false);
 
     const authState = useAuthState();
     const authDispatch = useAuthDispatch();
 
     // ### Simple useEffect-2
-    useEffect(() => {
-        console.log('UseEffect çalıştı');
 
-        // console.log(authDispatch);
+    useEffect(() => {
+        console.log('fetching2 ...');
 
         let isMounted = true; // note mutable flag
-
         ; (async () => {
             try {
-                await checkAuthenticated(authDispatch, false, history.location.pathname, history);
-                console.log('fetched user =>', isMounted);
+                // await checkAuthenticated(authDispatch, false, history.location.pathname, history);
+                const res = await axios.get(`http://localhost:8080/api/media/files`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `${localStorage.getItem('accessToken')}`,
+                    }
+                });
+
                 if (isMounted) { // add conditional check
-                    setIsFetching(true);
+                    setFetching(true);
+                    console.log('fetched2 !!!', res.data);
                 } else console.error("aborted setState on unmounted component", 'e');
             } catch (err) {
-                setIsFetching(true);
-                console.error(err);
+                setFetching(true);
+                console.error(err, 'e');
             }
         })();
 
-        return () => {
-            console.log('isMounted =>', isMounted);
-            isMounted = false;
-        };
+        return () => { isMounted = false; };
     }, []);
 
     return (
