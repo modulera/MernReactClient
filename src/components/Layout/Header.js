@@ -179,7 +179,7 @@ const Header = (props) => {
                 <Toolbar sx={{ pr: "24px" }} className="testasd">
                     {/* keep right padding when drawer closed */}
 
-                    {accessToken && (
+                    {/* {accessToken && (
                         <IconButton
                             edge="start"
                             color="inherit"
@@ -193,9 +193,9 @@ const Header = (props) => {
                         >
                             <MenuIcon />
                         </IconButton>
-                    )}
+                    )} */}
 
-                    {accessToken && (
+                    {/* {accessToken && (
                         <Typography
                             variant="h6"
                             noWrap
@@ -212,9 +212,9 @@ const Header = (props) => {
                         >
                             LOGO
                         </Typography>
-                    )}
+                    )} */}
 
-                    <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                    <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
                         {routes.filter(item => item?.title && item.isVisible && (item.isPrivate === false || accessToken))
                             .sort((a, b) => a.priority - b.priority)
                             .map((route, i) => (
@@ -230,12 +230,12 @@ const Header = (props) => {
                     <Typography sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }} />
 
                     <Box sx={{ flexGrow: 0 }}>
-                        {headerMenuRight({ accessToken, isAuthenticated, handleOpenUserMenu, anchorElUser, handleCloseUserMenu, handleLogout, settings })}
+                        {/* {headerMenuRight({ accessToken, isAuthenticated, handleOpenUserMenu, anchorElUser, handleCloseUserMenu, handleLogout, settings })} */}
                     </Box>
                 </Toolbar>
             </AppBar>
 
-            <Drawer sx={{ display: { xs: "block", md: "none" } }}
+            {/* <Drawer sx={{ display: { xs: "block", md: "none" } }}
                 open={open}
                 variant={accessToken ? 'permanent' : 'temporary'}>
                 <Toolbar
@@ -256,7 +256,7 @@ const Header = (props) => {
                     <Divider sx={{ my: 1 }} />
                     {secondaryListItems}
                 </List>
-            </Drawer>
+            </Drawer> */}
         </>
     );
 };
