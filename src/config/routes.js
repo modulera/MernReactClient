@@ -57,6 +57,15 @@ const routes = [
     title: 'Konum',
   },
   {
+    path: '/davet',
+    component: Location,
+    isPrivate: false,
+    isVisible: false,
+    multiple: false,
+    priority: 3,
+    title: 'Konum',
+  },
+  {
     path: '/signin',
     component: Signin,
     isPrivate: false,

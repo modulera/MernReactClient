@@ -1,6 +1,7 @@
 .bak/*
 .env
 dist/
+build/
 uploads/*
 package-lock.json
 

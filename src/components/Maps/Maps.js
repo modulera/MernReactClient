@@ -111,7 +111,7 @@ const Maps = () => {
             <Box>
                 <Stack spacing={2} direction="row" justifyContent="center">
                     <BtnItem variant={selectedMarkerId === 2 ? 'contained' : 'outlined'} onClick={() => setSelectedMarkerId(2)}>İstanbul (Kına)</BtnItem>
-                    <BtnItem variant={selectedMarkerId === 1 ? 'contained' : 'outlined'} onClick={() => setSelectedMarkerId(1)}>İstanbul (Nikah)</BtnItem>
+                    <BtnItem variant={selectedMarkerId === 1 ? 'contained' : 'outlined'} onClick={() => setSelectedMarkerId(1)}>İstanbul (Nikah-Düğün)</BtnItem>
                     <BtnItem variant={selectedMarkerId === 3 ? 'contained' : 'outlined'} onClick={() => setSelectedMarkerId(3)}>Kütahya (Düğün)</BtnItem>
                 </Stack>
             </Box>
