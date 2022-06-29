@@ -17,7 +17,7 @@ const Footer = (props) => {
                     align="center"
                 >
                     {"Copyright © "}
-                    <Link to='/'>AppName</Link>
+                    {/* <Link to='/'>AppName</Link> */}
                     {" " + new Date().getFullYear()}
                 </Typography>
             </Container>

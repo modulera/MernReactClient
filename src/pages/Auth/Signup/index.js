@@ -49,7 +49,7 @@ const Signup = () => {
     };
 
     if (isAuthenticated) {
-        return <Redirect to='/dashboard' />;
+        return <Redirect to='/location' />;
     }
 
     return (

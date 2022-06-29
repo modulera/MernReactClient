@@ -176,6 +176,7 @@ function Uploads(props) {
                                         alt={item.name}
                                         loading="lazy"
                                         onClick={e => openGallery(e, i)}
+                                        style={{ cursor: "pointer" }}
                                     />
 
                                     <ImageListItemBar

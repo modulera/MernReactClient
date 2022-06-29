@@ -21,14 +21,14 @@ const markers = [
         name: "Nikah : Bey Garden Düğün Davet Organizasyon",
         icon: "map-marker.png",
         position: { lat: 40.9941425, lng: 28.5980485 },
-        zoom: 21,
+        zoom: 19,
     },
     {
         id: 2,
         name: "Kına : Ansu Davet Organizasyon",
         icon: "map-marker.png",
         position: { lat: 41.0002867, lng: 28.6450183 },
-        zoom: 24,
+        zoom: 21,
     },
     {
         id: 3,
