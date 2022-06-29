@@ -181,7 +181,7 @@ const Signup = () => {
                         <Grid container justifyContent="flex-end">
                             <Grid item>
                                 <RaouteLink to="/signin" variant="body2">
-                                    Zaten bir hesabınız mı var? Oturum Aç
+                                    Oturum Aç
                                 </RaouteLink>
                             </Grid>
                         </Grid>

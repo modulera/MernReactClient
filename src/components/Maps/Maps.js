@@ -1,8 +1,12 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker, InfoWindow } from "@react-google-maps/api";
 
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import {
+    Directions as DirectionsIcon,
+    // AssistantDirection as AssistantDirectionIcon,
+} from '@mui/icons-material';
 
 const BtnItem = styled(Button)(({ theme }) => ({
     // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -36,9 +40,10 @@ const markers = [
 ];
 
 const infoWindowStyle = {
-    background: `white`,
-    border: `1px solid #ccc`,
-    padding: 15
+    background: "white",
+    border: "1px solid #ccc",
+    padding: 15,
+    textAlign: "center"
 }
 
 const mapZoomAnimate = (map, targetZoom, currentZoom) => {
@@ -129,7 +134,18 @@ const Maps = () => {
                             >
                                 {activeMarkerId === id ? (
                                     <InfoWindow onCloseClick={() => setActiveMarkerId(null)}>
-                                        <div style={infoWindowStyle}>{name}</div>
+                                        <div style={infoWindowStyle}>
+                                            <Typography sx={{ mb: 1 }}>
+                                                {name}
+                                            </Typography>
+
+                                            <Button
+                                                sx={{ color: "green" }}
+                                                onClick={() => window.open(`https://www.google.com/maps?daddr=${position.lat},${position.lng}`)}>
+                                                <DirectionsIcon />
+                                                KONUMA GİT
+                                            </Button>
+                                        </div>
                                     </InfoWindow>
                                 ) : null}
                             </Marker>

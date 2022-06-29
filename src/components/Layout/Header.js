@@ -195,25 +195,27 @@ const Header = (props) => {
                         </IconButton>
                     )}
 
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="/"
-                        sx={{
-                            mr: 2,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        LOGO
-                    </Typography>
+                    {accessToken && (
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="a"
+                            href="/"
+                            sx={{
+                                mr: 2,
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.3rem',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                            }}
+                        >
+                            LOGO
+                        </Typography>
+                    )}
 
                     <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                        {routes.filter(item => item?.title && item.isVisible && (item.isPrivate === false || item.multiple === true))
+                        {routes.filter(item => item?.title && item.isVisible && (item.isPrivate === false || accessToken))
                             .sort((a, b) => a.priority - b.priority)
                             .map((route, i) => (
                                 <NavLink

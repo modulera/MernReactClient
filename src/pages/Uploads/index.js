@@ -71,8 +71,8 @@ function Uploads(props) {
 
     const lightGallery = useRef(null);
 
-    const openGallery = useCallback(() => {
-        lightGallery.current.openGallery();
+    const openGallery = useCallback((e, i = 0) => {
+        lightGallery.current.openGallery(i);
     }, []);
 
     const onInitGallery = useCallback((detail) => {
@@ -152,7 +152,7 @@ function Uploads(props) {
                 </div>
 
                 <div className='lightGallery'>
-                    {mediaState?.loading ? 'Yükleniyor...' : (<button onClick={openGallery}>Open Gallery</button>)}
+                    {/* {mediaState?.loading ? 'Yükleniyor...' : (<button onClick={openGallery}>Open Gallery</button>)} */}
                     <LightGallery
                         elementClassNames="custom-classname"
                         dynamic
@@ -166,7 +166,7 @@ function Uploads(props) {
                     {userImages.length > 0 && (
                         <ImageList>
                             <ImageListItem key="Subheader" cols={2}>
-                                <ListSubheader component="div">December</ListSubheader>
+                                <ListSubheader component="div">{new Date(userImages[0].createdAt).toISOString().slice(0, 10)}</ListSubheader>
                             </ImageListItem>
                             {userImages.map((item, i) => (
                                 <ImageListItem key={item.id} sx={{ mb: 2 }}>
@@ -175,6 +175,7 @@ function Uploads(props) {
                                         srcSet={`${CONFIG.apiBaseUrl}/${item.fullPath}?w=248&fit=crop&auto=format&dpr=2 2x`}
                                         alt={item.name}
                                         loading="lazy"
+                                        onClick={e => openGallery(e, i)}
                                     />
 
                                     <ImageListItemBar

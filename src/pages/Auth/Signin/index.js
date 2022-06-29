@@ -106,7 +106,7 @@ function Login() {
                             <Grid item xs>
                                 <FormControlLabel
                                     control={<Checkbox value="remember" color="primary" />}
-                                    label="Beni hatırla"
+                                    label="Hatırla"
                                 />
                             </Grid>
                             <Grid item>
@@ -123,15 +123,10 @@ function Login() {
                             </Grid>
                         </Grid>
 
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Şifrenizi mi unuttunuz?
-                                </Link>
-                            </Grid>
+                        <Grid container justifyContent="flex-end">
                             <Grid item>
                                 <RaouteLink to="/signup" variant="body2">
-                                    {"Hesabınız yok mu? Kaydol"}
+                                    {"Kaydol"}
                                 </RaouteLink>
                             </Grid>
                         </Grid>
