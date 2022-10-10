@@ -37,7 +37,7 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
-import CONFIG from '../../config';
+import { API_URL, API_BAS_URL } from '../../config';
 import { useAuthState } from '../../context/auth';
 import { loadFiles, useMediaState, useMediaDispatch } from '../../context/media';
 
@@ -115,8 +115,8 @@ function Uploads(props) {
                 newItems.push({
                     id: item.id,
                     // size: '1400-933',
-                    src: `${CONFIG.apiBaseUrl}/${item.fullPath}`,
-                    thumb: `${CONFIG.apiBaseUrl}/${item.fullPath}`,
+                    src: `${API_BAS_URL}/${item.fullPath}`,
+                    thumb: `${API_BAS_URL}/${item.fullPath}`,
                     subHtml: `<div class="lightGallery-captions" id="image-${index}"><h4>${item.name}</h4><p>Published on ${item.updatedAt}</p></div>`,
                 });
             }
@@ -139,7 +139,7 @@ function Uploads(props) {
                         allowMultiple={true}
                         maxFiles={3}
                         server={{
-                            url: `${CONFIG.apiUrl}/media/files`,
+                            url: `${API_URL}/media/files`,
                             process: {
                                 headers: {
                                     'Authorization': accessToken,
@@ -171,8 +171,8 @@ function Uploads(props) {
                             {userImages.map((item, i) => (
                                 <ImageListItem key={item.id} sx={{ mb: 2 }}>
                                     <img
-                                        src={`${CONFIG.apiBaseUrl}/${item.fullPath}?w=248&fit=crop&auto=format`}
-                                        srcSet={`${CONFIG.apiBaseUrl}/${item.fullPath}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                                        src={`${API_BAS_URL}/${item.fullPath}?w=248&fit=crop&auto=format`}
+                                        srcSet={`${API_BAS_URL}/${item.fullPath}?w=248&fit=crop&auto=format&dpr=2 2x`}
                                         alt={item.name}
                                         loading="lazy"
                                         onClick={e => openGallery(e, i)}
@@ -209,7 +209,7 @@ function Uploads(props) {
                         //         const cols = item.featured ? 2 : 1;
                         //         const rows = item.featured ? 2 : 1;
 
-                        //         item.src = `${CONFIG.apiBaseUrl}/${item.fullPath}`;
+                        //         item.src = `${API_BAS_URL}/${item.fullPath}`;
 
                         //         return (
                         //             <ImageListItem key={item.id} cols={cols} rows={rows}>

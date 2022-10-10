@@ -7,7 +7,7 @@ import {
     MEDIAS_LOADED_SUCCESS,
 } from './types';
 
-import CONFIG from '../../config';
+import { API_URL } from '../../config';
 
 const parseError = (err) => {
     const errorText = (err.response ?
@@ -30,7 +30,7 @@ export const loadFiles = async (dispatch) => {
     };
 
     try {
-        const res = await axios.get(`${CONFIG.apiUrl}/media/files`, config);
+        const res = await axios.get(`${API_URL}/media/files`, config);
 
         dispatch({
             type: MEDIAS_LOADED_SUCCESS,

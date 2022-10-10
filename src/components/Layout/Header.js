@@ -100,8 +100,8 @@ const AppBar = styled(MuiAppBar, {
         duration: theme.transitions.duration.leavingScreen
     }),
     ...(open && {
-        // marginLeft: drawerWidth, // ! depth1
-        // width: `calc(100% - ${drawerWidth}px)`,  // ! depth1
+        marginLeft: drawerWidth, // ! depth1
+        width: `calc(100% - ${drawerWidth}px)`,  // ! depth1
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen
@@ -179,7 +179,7 @@ const Header = (props) => {
                 <Toolbar sx={{ pr: "24px" }} className="testasd">
                     {/* keep right padding when drawer closed */}
 
-                    {/* {accessToken && (
+                    {accessToken && (
                         <IconButton
                             edge="start"
                             color="inherit"
@@ -187,13 +187,13 @@ const Header = (props) => {
                             onClick={toggleDrawer}
                             sx={{
                                 marginRight: "36px",
-                                display: { xs: "block", md: "none" },
-                                // ...(open && { display: "none" })  // ! depth1
+                                // display: { xs: "block", md: "none" },
+                                ...(open && { display: "none" })  // ! depth1
                             }}
                         >
                             <MenuIcon />
                         </IconButton>
-                    )} */}
+                    )}
 
                     {/* {accessToken && (
                         <Typography
@@ -227,15 +227,16 @@ const Header = (props) => {
                             ))}
                     </Box>
 
-                    <Typography sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }} />
+                    <Typography sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }} />
 
                     <Box sx={{ flexGrow: 0 }}>
-                        {/* {headerMenuRight({ accessToken, isAuthenticated, handleOpenUserMenu, anchorElUser, handleCloseUserMenu, handleLogout, settings })} */}
+                        {headerMenuRight({ accessToken, isAuthenticated, handleOpenUserMenu, anchorElUser, handleCloseUserMenu, handleLogout, settings })}
                     </Box>
                 </Toolbar>
             </AppBar>
 
-            {/* <Drawer sx={{ display: { xs: "block", md: "none" } }}
+            <Drawer
+                // sx={{ display: { xs: "block", md: "flex" } }}
                 open={open}
                 variant={accessToken ? 'permanent' : 'temporary'}>
                 <Toolbar
@@ -256,7 +257,7 @@ const Header = (props) => {
                     <Divider sx={{ my: 1 }} />
                     {secondaryListItems}
                 </List>
-            </Drawer> */}
+            </Drawer>
         </>
     );
 };

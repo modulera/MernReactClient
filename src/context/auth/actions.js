@@ -20,7 +20,7 @@ import {
     AUTHENTICATED_SUCCESS
 } from './types';
 
-import CONFIG from '../../config';
+import { API_URL } from '../../config';
 
 const parseError = (err) => {
     const errorText = (err.response ?
@@ -60,7 +60,7 @@ export const checkAuthenticated = async (dispatch, isPrivate, path, history) => 
         };
 
         try {
-            const res = await axios.get(`${CONFIG.apiUrl}/auth/me`, config);
+            const res = await axios.get(`${API_URL}/auth/me`, config);
 
             dispatch({
                 type: AUTHENTICATED_SUCCESS
@@ -103,7 +103,7 @@ export const loginUser = async (dispatch, email, password) => {
     const body = JSON.stringify({ email, password });
 
     try {
-        const res = await axios.post(`${CONFIG.apiUrl}/auth/login`, body, config)
+        const res = await axios.post(`${API_URL}/auth/login`, body, config)
 
         dispatch({
             type: LOGIN_SUCCESS,
@@ -129,7 +129,7 @@ export const signupUser = async (dispatch, email, phone, first_name, last_name, 
     const body = JSON.stringify({ email, phone, first_name, last_name, password, re_password });
 
     try {
-        const res = await axios.post(`${CONFIG.apiUrl}/auth/register`, body, config);
+        const res = await axios.post(`${API_URL}/auth/register`, body, config);
 
         dispatch({ type: SIGNUP_SUCCESS, payload: res.data });
     } catch (err) {
@@ -149,7 +149,7 @@ export const verify = (uid, token) => async dispatch => {
     const body = JSON.stringify({ uid, token });
 
     try {
-        const res = await axios.post(`${CONFIG.apiUrl}/auth/users/activation`, body, config);
+        const res = await axios.post(`${API_URL}/auth/users/activation`, body, config);
 
         dispatch({
             type: ACTIVATION_SUCCESS,
@@ -175,7 +175,7 @@ export const resetPassword = async (dispatch, email) => {
     const body = JSON.stringify({ email });
 
     try {
-        await axios.post(`${CONFIG.apiUrl}/auth/users/reset_password`, body, config);
+        await axios.post(`${API_URL}/auth/users/reset_password`, body, config);
         dispatch({
             type: RESET_PASSWORD_SUCCESS,
             msg: "Email has been sent! Check your email for further direction."
@@ -198,7 +198,7 @@ export const reset_password_confirm = (uid, token, new_password, re_new_password
     const body = JSON.stringify({ uid, token, new_password, re_new_password });
 
     try {
-        const res = await axios.post(`${CONFIG.apiUrl}/auth/users/reset_password_confirm`, body, config);
+        const res = await axios.post(`${API_URL}/auth/users/reset_password_confirm`, body, config);
 
         dispatch({
             type: RESET_PASSWORD_CONFIRM_SUCCESS,

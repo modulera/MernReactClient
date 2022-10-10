@@ -5,6 +5,8 @@ import { checkAuthenticated, useAuthState, useAuthDispatch } from '../../context
 
 import axios from "axios";
 
+import { API_URL } from '../../config';
+
 function Test(props) {
     console.log('component render edildi');
 
@@ -32,7 +34,7 @@ function Test(props) {
         ; (async () => {
             try {
                 // await checkAuthenticated(authDispatch, false, history.location.pathname, history);
-                const res = await axios.get(`http://localhost:8080/api/media/files`, {
+                const res = await axios.get(`${API_URL}/media/files`, {
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
