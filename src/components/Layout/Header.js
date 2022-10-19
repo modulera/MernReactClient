@@ -195,7 +195,7 @@ const Header = (props) => {
                         </IconButton>
                     )}
 
-                    {/* {accessToken && (
+                    {accessToken && (
                         <Typography
                             variant="h6"
                             noWrap
@@ -212,7 +212,7 @@ const Header = (props) => {
                         >
                             LOGO
                         </Typography>
-                    )} */}
+                    )}
 
                     <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
                         {routes.filter(item => item?.title && item.isVisible && (item.isPrivate === false || accessToken))
@@ -235,8 +235,7 @@ const Header = (props) => {
                 </Toolbar>
             </AppBar>
 
-            <Drawer
-                // sx={{ display: { xs: "block", md: "flex" } }}
+            <Drawer sx={{ display: { xs: "block", md: "flex" } }}
                 open={open}
                 variant={accessToken ? 'permanent' : 'temporary'}>
                 <Toolbar
